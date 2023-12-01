@@ -56,7 +56,5 @@ for line in lines:
         last = first1
 
     num = int(first + last)
-    print(num)
-    print()
     s += num
 print(s)
