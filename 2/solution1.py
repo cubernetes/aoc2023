@@ -19,7 +19,6 @@ for i, line in enumerate(lines):
             set_of_cubes = set_.split(', ')
             for selection in set_of_cubes:
                 amount, color = selection.split(' ')
-                print(amount, color)
                 amount = int(amount)
                 if color == 'red':
                     if amount > red:
