@@ -1,23 +1,10 @@
 #!/usr/bin/env python3
 
-import re
-import sys
-from functools import lru_cache
-from collections import deque, defaultdict
+total = 0
+for line in open(0):
+    winning_nums, my_nums = map(set, map(str.split, line.split(":")[1].split('|')))
+    n_matching_nums = len(my_nums & winning_nums)
+    if n_matching_nums:
+        total += 2 ** (n_matching_nums - 1)
 
-
-data = open(0).read().strip()
-lines = data.splitlines()
-
-t = 0
-for line in lines:
-    winning, my = line.split(":")[1].split('|')
-    winning = winning.split()
-    my = my.split()
-    n = set(my) & set(winning)
-    n = len(n)
-    if n > 0:
-        s = 2 ** (n - 1)
-        t += s
-
-print(t)
+print(total)
