@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 
 import re
-from functools import lru_cache
-from collections import deque
 
-
-data = open(0).read().strip()
-lines = data.splitlines()
-digits_s = {
+digit_map = {
     'one': 1,
     'two': 2,
     'three': 3,
@@ -19,42 +14,43 @@ digits_s = {
     'nine': 9,
 }
 
-s = 0
-for line in lines:
+total = 0
+for line in open(0):
     m1 = re.search(r'\d', line)
-    m2 = re.search(fr'{"|".join(digits_s)}', line)
-    first1 = m1.group(0) if m1 else 'xxxxxxxxxxxxxxxxxxxxx'
-    first2 = m2.group(0) if m2 else 'xxxxxxxxxxxxxxxxxxxxx'
+    m2 = re.search(fr'{"|".join(digit_map)}', line)
+    first1 = m1.group(0) if m1 else 'uniquestring'
+    first2 = m2.group(0) if m2 else 'uniquestring'
     try:
         i1 = line.index(first1)
     except ValueError:
-        i1 = 99999999
+        i1 = float('inf')
     try:
         i2 = line.index(first2)
     except ValueError:
-        i2 = 9999999
+        i2 = float('inf')
     if i2 < i1:
-        first = str(digits_s[first2])
+        first = str(digit_map[first2])
     else:
         first = first1
 
-    m1 = re.search(r'\d', line[::-1])
-    m2 = re.search(fr'{"|".join([digit_s[::-1] for digit_s in digits_s])}', line[::-1])
-    first1 = m1.group(0) if m1 else 'xxxxxxxxxxxxxxxxxxxxx'
-    first2 = m2.group(0) if m2 else 'xxxxxxxxxxxxxxxxxxxxx'
+    rev_line = line[::-1]
+    m1 = re.search(r'\d', rev_line)
+    m2 = re.search(fr'{"|".join([digit[::-1] for digit in digit_map])}', rev_line)
+    last1 = m1.group(0) if m1 else 'uniquestring'
+    last2 = m2.group(0) if m2 else 'uniquestring'
     try:
-        i1 = line[::-1].index(first1)
+        i1 = rev_line.index(last1)
     except ValueError:
-        i1 = 99999999
+        i1 = float('inf')
     try:
-        i2 = line[::-1].index(first2)
+        i2 = rev_line.index(last2)
     except ValueError:
-        i2 = 9999999
+        i2 = float('inf')
     if i2 < i1:
-        last = str(digits_s[first2[::-1]])
+        last = str(digit_map[last2[::-1]])
     else:
-        last = first1
+        last = last1
 
-    num = int(first + last)
-    s += num
-print(s)
+    total += int(first + last)
+
+print(total)
