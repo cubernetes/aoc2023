@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 
-import re
-import sys
-import math
-from functools import lru_cache
-from collections import deque, defaultdict
-
+from collections import defaultdict
 
 data = open(0).read().strip()
 lines = data.splitlines()
 
+# from stackoverflow
 def numberToBase(n, b):
     if n == 0:
         return [0]
@@ -18,6 +14,52 @@ def numberToBase(n, b):
         digits.append(int(n % b))
         n //= b
     return digits[::-1]
+
+def card_from_card_id(card_id):
+    return {
+        0: '2',
+        1: '3',
+        2: '4',
+        3: '5',
+        4: '6',
+        5: '7',
+        6: '8',
+        7: '9',
+        8: 'T',
+        9: 'J',
+        10: 'Q',
+        11: 'K',
+        12: 'A',
+    }[card_id]
+
+def hand_type_strength(hand_type):
+    return {
+        None: -1,
+        'high card':       0,
+        'one pair':        1,
+        'two pair':        2,
+        'three of a kind': 3,
+        'full house':      4,
+        'four of a kind':  5,
+        'five of a kind':  6,
+    }[hand_type]
+
+def card_to_digit(card):
+    return {
+        'J': '0',
+        '2': '1',
+        '3': '2',
+        '4': '3',
+        '5': '4',
+        '6': '5',
+        '7': '6',
+        '8': '7',
+        '9': '8',
+        'T': '9',
+        'Q': 'A',
+        'K': 'B',
+        'A': 'C',
+    }[card]
 
 def get_hand_type(hand):
     cards = defaultdict(int)
@@ -39,23 +81,6 @@ def get_hand_type(hand):
     elif cards[0][1] == 1:
         return 'high card'
 
-def card_from_card_id(card_id):
-    return {
-        0: '2',
-        1: '3',
-        2: '4',
-        3: '5',
-        4: '6',
-        5: '7',
-        6: '8',
-        7: '9',
-        8: 'T',
-        9: 'J',
-        10: 'Q',
-        11: 'K',
-        12: 'A',
-    }[card_id]
-
 def glob_joker(hand):
     joker_count = hand.count('J')
     if joker_count == 0:
@@ -69,18 +94,6 @@ def glob_joker(hand):
             tmp_hand = tmp_hand.replace('<J>', card_from_card_id(card_id), 1)
         yield tmp_hand
 
-def hand_type_strength(hand_type):
-    return {
-        None: -1,
-        'high card':       0,
-        'one pair':        1,
-        'two pair':        2,
-        'three of a kind': 3,
-        'full house':      4,
-        'four of a kind':  5,
-        'five of a kind':  6,
-    }[hand_type]
-
 def get_hand_type_with_joker(joker_hand):
     best_hand_type = None
     for candidate_hand in glob_joker(joker_hand):
@@ -88,23 +101,6 @@ def get_hand_type_with_joker(joker_hand):
         if hand_type_strength(hand_type) > hand_type_strength(best_hand_type):
             best_hand_type = hand_type
     return best_hand_type
-
-def card_to_digit(card):
-    return {
-        'J': '0',
-        '2': '1',
-        '3': '2',
-        '4': '3',
-        '5': '4',
-        '6': '5',
-        '7': '6',
-        '8': '7',
-        '9': '8',
-        'T': '9',
-        'Q': 'A',
-        'K': 'B',
-        'A': 'C',
-    }[card]
 
 def as_base_13(hand):
     to_convert = list(hand)

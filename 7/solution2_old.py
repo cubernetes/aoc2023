@@ -1,12 +1,5 @@
 #!/usr/bin/env python3
 
-import re
-import sys
-import math
-from functools import lru_cache
-from collections import deque, defaultdict
-
-
 data = open(0).read().strip()
 lines = data.splitlines()
 
@@ -42,6 +35,22 @@ card_power2 = {
     'A': 13,
 }
 
+n_to_card_map = {
+    0: '2',
+    1: '3',
+    2: '4',
+    3: '5',
+    4: '6',
+    5: '7',
+    6: '8',
+    7: '9',
+    8: 'T',
+    9: 'J',
+    10: 'Q',
+    11: 'K',
+    12: 'A',
+}
+
 def get_power(candidate_hand, hand):
     cards = {}
     for card in candidate_hand:
@@ -68,22 +77,6 @@ def get_power(candidate_hand, hand):
         return 1e8 + strength
     return 0
 
-n_to_card_map = {
-    0: '2',
-    1: '3',
-    2: '4',
-    3: '5',
-    4: '6',
-    5: '7',
-    6: '8',
-    7: '9',
-    8: 'T',
-    9: 'J',
-    10: 'Q',
-    11: 'K',
-    12: 'A',
-}
-
 def hand_from_list(hand, N):
     js = [n_to_card_map[n] for n in N]
     hand = hand.replace('J', '<J>')
@@ -105,6 +98,8 @@ def generate_hands(hand):
             if N[i] == 13:
                 N[i] = 0
                 N[i-1] += 1
+    # this solution would have worked if I didn't forget the
+    # following line...
     yield hand_from_list(hand, N)
 
 A = []
@@ -129,3 +124,4 @@ print(t)
 # part 2
 # wrong: 250103135
 # wrong: 250055872
+# correct: 250057090
