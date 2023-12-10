@@ -1,0 +1,4 @@
+start time:    08:39:11
+diff to 06:00: 2h39m11s
+finish pt 1:   3h36m50s - 2h39m11s = 0h57m39s
+finish pt 2:   4h36m00s - 2h39m11s = 1h56m49s
