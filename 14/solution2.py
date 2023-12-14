@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
-import numpy as np
 from copy import deepcopy
 
-grid = np.array(list(map(list, open(0).read().strip().splitlines())))
+grid = list(map(list, open(0).read().strip().splitlines()))
 
-def print_grid(grid, lines=False):
+def print_grid(grid: list[list[str]], lines: bool=False) -> None:
     for r in range(len(grid)):
         if lines:
             print(end=f'{str(len(grid) - r):>3} ')
@@ -14,7 +13,7 @@ def print_grid(grid, lines=False):
         print()
     print()
 
-def roll_down(grid):
+def roll_down(grid: list[list[str]]) -> None:
     for r in range(len(grid) - 1, -1, -1):
         for c in range(len(grid[r])):
             if grid[r][c] == 'O':
@@ -24,7 +23,7 @@ def roll_down(grid):
                         grid[down][c] = 'O'
                     else:
                         break
-def roll_up(grid):
+def roll_up(grid: list[list[str]]) -> None:
     for r in range(len(grid)):
         for c in range(len(grid[r])):
             if grid[r][c] == 'O':
@@ -35,11 +34,11 @@ def roll_up(grid):
                     else:
                         break
 
-def transpose(grid) -> list[list[str]]:
+def transpose(grid: list[list[str]]) -> list[list[str]]:
     grid = [list(x) for x in zip(*grid)]
     return grid
 
-def cycle(grid) -> list[list[str]]:
+def cycle(grid: list[list[str]]) -> list[list[str]]:
     roll_up(grid) # north
     grid = transpose(grid)
     roll_up(grid) # west
@@ -50,14 +49,14 @@ def cycle(grid) -> list[list[str]]:
     grid = transpose(grid)
     return grid
 
-def same_grid(grid1, grid2) -> bool:
+def same_grid(grid1: list[list[str]], grid2: list[list[str]]) -> bool:
     for r in range(len(grid1)):
         for c in range(len(grid1[r])):
             if grid1[r][c] != grid2[r][c]:
                 return False
     return True
 
-def grid_load(grid):
+def grid_load(grid: list[list[str]]) -> int:
     load = 0
     for r in range(len(grid)):
         for c in range(len(grid[r])):
@@ -65,7 +64,7 @@ def grid_load(grid):
                 load += len(grid) - r
     return load
 
-def get_phase_and_period(g):
+def get_phase_and_period(g: list[list[str]]) -> tuple[int, int]:
     states = []
     i = 0
     grid = deepcopy(g)
@@ -77,7 +76,7 @@ def get_phase_and_period(g):
                 return j, i - j + 1
         i += 1
 
-def repeat_period(grid, n):
+def repeat_period(grid: list[list[str]], n: int) -> list[list[str]]:
     for _ in range(n):
         grid = cycle(grid)
     return grid
