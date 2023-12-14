@@ -14,51 +14,40 @@ def print_grid(grid, lines=False):
         print()
     print()
 
+def roll_down(grid):
+    for r in range(len(grid) - 1, -1, -1):
+        for c in range(len(grid[r])):
+            if grid[r][c] == 'O':
+                for down in range(r + 1, len(grid)):
+                    if grid[down][c] == '.':
+                        grid[down-1][c] = '.'
+                        grid[down][c] = 'O'
+                    else:
+                        break
+def roll_up(grid):
+    for r in range(len(grid)):
+        for c in range(len(grid[r])):
+            if grid[r][c] == 'O':
+                for up in range(r - 1, -1, -1):
+                    if grid[up][c] == '.':
+                        grid[up+1][c] = '.'
+                        grid[up][c] = 'O'
+                    else:
+                        break
+
+def transpose(grid) -> list[list[str]]:
+    grid = [list(x) for x in zip(*grid)]
+    return grid
+
 def cycle(grid) -> list[list[str]]:
-    # roll north
-    for r in range(len(grid)):
-        for c in range(len(grid[r])):
-            if grid[r][c] == 'O':
-                for up in range(r - 1, -1, -1):
-                    if grid[up][c] == '.':
-                        grid[up+1][c] = '.'
-                        grid[up][c] = 'O'
-                    else:
-                        break
-    grid = [list(x) for x in zip(*grid)]
-    # roll west
-    for r in range(len(grid)):
-        for c in range(len(grid[r])):
-            if grid[r][c] == 'O':
-                for up in range(r - 1, -1, -1):
-                    if grid[up][c] == '.':
-                        grid[up+1][c] = '.'
-                        grid[up][c] = 'O'
-                    else:
-                        break
-    grid = [list(x) for x in zip(*grid)]
-    # roll south
-    for r in range(len(grid) - 1, -1, -1):
-        for c in range(len(grid[r])):
-            if grid[r][c] == 'O':
-                for down in range(r + 1, len(grid)):
-                    if grid[down][c] == '.':
-                        grid[down-1][c] = '.'
-                        grid[down][c] = 'O'
-                    else:
-                        break
-    grid = [list(x) for x in zip(*grid)]
-    # roll east
-    for r in range(len(grid) - 1, -1, -1):
-        for c in range(len(grid[r])):
-            if grid[r][c] == 'O':
-                for down in range(r + 1, len(grid)):
-                    if grid[down][c] == '.':
-                        grid[down-1][c] = '.'
-                        grid[down][c] = 'O'
-                    else:
-                        break
-    grid = [list(x) for x in zip(*grid)]
+    roll_up(grid) # north
+    grid = transpose(grid)
+    roll_up(grid) # west
+    grid = transpose(grid)
+    roll_down(grid) # south
+    grid = transpose(grid)
+    roll_down(grid) # east
+    grid = transpose(grid)
     return grid
 
 def same_grid(grid1, grid2) -> bool:
